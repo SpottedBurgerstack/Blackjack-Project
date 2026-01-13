@@ -15,11 +15,17 @@ def dealer_draw():
     dealer_cards.append(random.choice(cards))
 if play_again == "y":
     power_on = True
+    player_cards = []
+    dealer_cards = []
     while power_on:
-        player_cards = []
-        dealer_cards = []
+        player_draw()
         player_draw()
         dealer_draw()
-        if input("Hit or Stay?").lower() == "hit":
+        dealer_draw()
+        print(f"Your cards are {player_cards} and your total is {sum(player_cards)}")
+        print(f"The dealer's first card is {dealer_cards[0]}")
+        if input("Hit or Stay? ").lower() == "hit":
             player_draw()
-            dealer_draw()
+            if sum(dealer_cards)<14:
+                dealer_draw()
+        
