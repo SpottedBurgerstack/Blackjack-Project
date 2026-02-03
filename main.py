@@ -8,11 +8,45 @@
 #TODO If an 11 is drawn and it would cause the total to exceed 11, count it as 1 instead
 import random
 cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+
 play_again = input("Do you want to play a game of Blackjack? Y/N: ").lower()
+
 def player_draw():
     player_cards.append(random.choice(cards))
+
 def dealer_draw():
     dealer_cards.append(random.choice(cards))
+
+def card_check():
+    if sum(player_cards)>21:
+        if 11 in player_cards:
+            if sum(player_cards)-10 > 21:
+                print("Bust! You Lose!")
+                power_on = False
+            elif sum(player_cards)-10 == 21:
+                print("Blackjack! You Win!")
+                power_on = False
+        else:
+            print("Bust! You Lose!")
+            power_on = False
+    elif sum(player_cards) == 21:
+        print("Blackjack! You Win!")
+        power_on = False
+    elif sum(dealer_cards) > 21:
+        if 11 in dealer_cards:
+            if sum(dealer_cards)-10 > 21:
+                print("Dealer Bust! You Win!")
+                power_on = False
+            elif sum(dealer_cards)-10 == 21:
+                print("Dealer Blackjack! You Lose!")
+                power_on = False
+        else:
+            print("Dealer Bust! You Win!")
+            power_on = False
+    elif sum(dealer_cards) == 21:
+        print("Dealer Blackjack! You Lose!")
+        power_on = False
+
 if play_again == "y":
     power_on = True
     player_cards = []
@@ -24,8 +58,9 @@ if play_again == "y":
         dealer_draw()
         print(f"Your cards are {player_cards} and your total is {sum(player_cards)}")
         print(f"The dealer's first card is {dealer_cards[0]}")
+        card_check()
         if input("Hit or Stay? ").lower() == "hit":
             player_draw()
             if sum(dealer_cards)<14:
                 dealer_draw()
-        
+
