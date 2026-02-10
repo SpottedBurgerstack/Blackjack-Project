@@ -11,6 +11,8 @@ cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
 play_again = input("Do you want to play a game of Blackjack? Y/N: ").lower()
 
+power_on = True
+
 def player_draw():
     player_cards.append(random.choice(cards))
 
@@ -22,45 +24,61 @@ def card_check():
         if 11 in player_cards:
             if sum(player_cards)-10 > 21:
                 print("Bust! You Lose!")
-                power_on = False
+                return False
             elif sum(player_cards)-10 == 21:
                 print("Blackjack! You Win!")
-                power_on = False
+                return False
         else:
             print("Bust! You Lose!")
-            power_on = False
+            return False
     elif sum(player_cards) == 21:
         print("Blackjack! You Win!")
-        power_on = False
+        return False
     elif sum(dealer_cards) > 21:
         if 11 in dealer_cards:
             if sum(dealer_cards)-10 > 21:
                 print("Dealer Bust! You Win!")
-                power_on = False
+                return False
             elif sum(dealer_cards)-10 == 21:
                 print("Dealer Blackjack! You Lose!")
-                power_on = False
+                return False
         else:
             print("Dealer Bust! You Win!")
-            power_on = False
+            return False
     elif sum(dealer_cards) == 21:
         print("Dealer Blackjack! You Lose!")
-        power_on = False
+        return False
+    else:
+        return True
 
 if play_again == "y":
     power_on = True
     player_cards = []
     dealer_cards = []
+    player_draw()
+    player_draw()
+    dealer_draw()
+    dealer_draw()
+    print(f"Your cards are {player_cards} and your total is {sum(player_cards)}")
+    print(f"The dealer's first card is {dealer_cards[0]}")
     while power_on:
-        player_draw()
-        player_draw()
-        dealer_draw()
-        dealer_draw()
-        print(f"Your cards are {player_cards} and your total is {sum(player_cards)}")
-        print(f"The dealer's first card is {dealer_cards[0]}")
-        card_check()
+        power_on = card_check()
         if input("Hit or Stay? ").lower() == "hit":
             player_draw()
+            print(f"Your cards are {player_cards} and your total is {sum(player_cards)}")
+            power_on = card_check()
             if sum(dealer_cards)<14:
                 dealer_draw()
+                power_on = card_check()
+    if sum(dealer_cards)<14:
+        dealer_draw()
+        power_on = card_check()
+    elif sum(player_cards)>sum(dealer_cards):
+        print("You Win!")
+        power_on = False
+        play_again = input("Do you want to play again? Y/N: ").lower()
+    else:
+        print("You Lose!")
+        power_on = False
+        play_again = input("Do you want to play again? Y/N: ").lower()
 
